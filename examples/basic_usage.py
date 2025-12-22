@@ -33,8 +33,12 @@ async def run_with_retry(runner, user_id, session_id, message, max_retries=5):
                 new_message=message,
             ):
                 if event.is_final_response():
-                    final_response = event.content.parts[0].text if event.content.parts else ""
-                    logger.info(f"Agent finished with response: {final_response}")
+                    # Safely access content and parts
+                    if event.content and event.content.parts:
+                        final_response = event.content.parts[0].text or ""
+                        logger.info(f"Agent finished with response: {final_response}")
+                    else:
+                        logger.info("Agent finished (no text response).")
                 else:
                     pass
             return # Success

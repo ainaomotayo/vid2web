@@ -1,16 +1,17 @@
 import pytest
 import os
+from pathlib import Path
 from google.adk.runners import InMemoryRunner
 from google.genai import types
 from video_to_website.agent import app
 
 @pytest.fixture
-def runner():
+def runner(common_plugins):
     runner = InMemoryRunner(
         agent=app.root_agent,
         app_name="test_full_pipeline",
     )
-    for plugin in app.plugins:
+    for plugin in common_plugins:
         runner.plugin_manager.register_plugin(plugin)
     return runner
 
@@ -59,18 +60,23 @@ async def test_full_pipeline_execution(runner, session, mock_video_path):
     assert "video_analysis_results" in final_state
     assert "content_extraction_results" in final_state
     
-    # Check Architecture (might be implicit in code gen, but good to check if agent sets it)
-    # Note: architecture_agent doesn't have a tool to set state explicitly in the current implementation,
-    # it relies on the LLM response being passed. However, code_generator uses it.
+    # Check Architecture
+    assert "site_architecture" in final_state
     
     # Check Code Generation
     assert "generated_html" in final_state
     assert "generated_css" in final_state
     assert "generated_js" in final_state
     
+    # Check Image Extraction
+    assert "asset_manifest" in final_state
+    asset_manifest = final_state["asset_manifest"]
+    assert isinstance(asset_manifest, list)
+    if asset_manifest:
+        # Check if the asset files were actually created
+        first_asset_path = Path(asset_manifest[0])
+        assert first_asset_path.exists()
+        assert first_asset_path.parent.name == "assets"
+
     # Check Validation
-    # Validation results might be in the state if the validator tool sets them
-    # Our validator tool mock implementation doesn't explicitly set state keys in the tool function itself,
-    # but the agent might capture the output.
-    # Let's check if we have a final response
     assert any(e.is_final_response() for e in events)

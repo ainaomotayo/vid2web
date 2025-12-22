@@ -14,7 +14,7 @@ from .plugins.model_fallback_plugin import ModelFallbackPlugin
 from .plugins.stagger_plugin import StaggerPlugin
 
 # Use Gemini 2.5 Flash for better parallel throughput
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-3-pro-preview"
 
 # Configure retry options for robustness against quota limits
 retry_options = types.HttpRetryOptions(
@@ -52,6 +52,8 @@ analysis_agent = ParallelAgent(
 )
 
 # Validation loop for iterative refinement
+# Note: Removed exit_condition as it caused Pydantic validation errors.
+# The loop will run for max_iterations or until the agent decides to stop (if supported).
 validation_loop = LoopAgent(
     name="validation_refinement",
     description="Iteratively validate and refine generated code",

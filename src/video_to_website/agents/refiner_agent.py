@@ -1,6 +1,7 @@
 from google.adk.agents import Agent
 from google.adk.models.google_llm import Gemini
 
+from ..tools.refinement_tools import apply_code_fixes, read_generated_code
 from ..prompts.validation_prompts import REFINEMENT_INSTRUCTION
 
 refiner_agent = Agent(
@@ -8,5 +9,6 @@ refiner_agent = Agent(
     model=Gemini(model="gemini-2.5-flash"),
     description="Applies fixes and improvements based on validation feedback",
     instruction=REFINEMENT_INSTRUCTION,
-    output_key="refinement_actions",
+    tools=[apply_code_fixes, read_generated_code],
+    output_key="refinement_results",
 )

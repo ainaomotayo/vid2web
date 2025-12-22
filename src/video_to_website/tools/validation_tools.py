@@ -13,6 +13,13 @@ try:
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
 
+# Try to import axe-core-python
+try:
+    from axe_core_python.async_playwright import Axe
+    AXE_AVAILABLE = True
+except ImportError:
+    AXE_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,14 +27,14 @@ async def launch_browser_preview(
     html_path: str,
     tool_context: ToolContext | None = None,
 ) -> dict[str, Any]:
-    """Launch browser with generated HTML for preview.
+    """Launch browser with generated HTML for preview and capture console errors.
 
     Args:
         html_path: Path to HTML file.
         tool_context: ADK tool context.
 
     Returns:
-        Browser session information.
+        Browser session information and console errors.
     """
     logger.info(f"Launching browser preview for: {html_path}")
     
@@ -45,12 +52,13 @@ async def launch_browser_preview(
             page = await browser.new_page()
             # Convert file path to file:// URL
             file_url = f"file://{os.path.abspath(html_path)}"
-            await page.goto(file_url)
-            title = await page.title()
             
-            # Check for console errors
+            # Capture console errors
             console_errors = []
             page.on("console", lambda msg: console_errors.append(msg.text) if msg.type == "error" else None)
+            
+            await page.goto(file_url)
+            title = await page.title()
             
             await browser.close()
             
@@ -108,14 +116,14 @@ async def capture_screenshot(
         return b""
 
 
-def validate_accessibility(
-    html_content: str,
+async def validate_accessibility(
+    html_path: str,
     tool_context: ToolContext | None = None,
 ) -> dict[str, Any]:
-    """Run accessibility validation checks.
+    """Run comprehensive accessibility validation checks using axe-core.
 
     Args:
-        html_content: HTML to validate.
+        html_path: Path to HTML file to validate.
         tool_context: ADK tool context.
 
     Returns:
@@ -123,26 +131,48 @@ def validate_accessibility(
     """
     logger.info("Validating accessibility...")
     
-    issues = []
-    
-    # Basic static checks
-    if "<html" not in html_content or "lang=" not in html_content:
-        issues.append({"id": "html-lang", "description": "Missing lang attribute on html tag", "severity": "error"})
-    if "<title>" not in html_content:
-        issues.append({"id": "document-title", "description": "Missing title tag", "severity": "error"})
-    if "alt=" not in html_content and "<img" in html_content:
-        issues.append({"id": "image-alt", "description": "Potential missing alt text for images", "severity": "warning"})
-    if "<button" in html_content and "aria-label" not in html_content and ">" in html_content:
-         # Very naive check, but better than nothing
-         pass 
+    if not PLAYWRIGHT_AVAILABLE or not AXE_AVAILABLE:
+        logger.warning("Playwright or Axe not installed. Returning mock results.")
+        return {"status": "warning", "message": "Validation tools missing", "issues": []}
 
-    # In a real scenario, we would use axe-core via playwright here if available
-    
-    return {
-        "status": "success",
-        "score": 100 - (len(issues) * 10),
-        "issues": issues,
-    }
+    try:
+        if not os.path.exists(html_path):
+             return {"status": "error", "error": f"File not found: {html_path}"}
+
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
+            file_url = f"file://{os.path.abspath(html_path)}"
+            await page.goto(file_url)
+            
+            # Run Axe analysis
+            axe = Axe()
+            results = await axe.run(page)
+            await browser.close()
+            
+            # Process results
+            violations = results.get("violations", [])
+            issues = []
+            for v in violations:
+                issues.append({
+                    "id": v["id"],
+                    "description": v["description"],
+                    "impact": v["impact"],
+                    "help": v["help"],
+                    "nodes": [n["html"] for n in v["nodes"]]
+                })
+                
+            score = 100 - (len(issues) * 5)
+            return {
+                "status": "success",
+                "score": max(0, score),
+                "issues": issues,
+                "violation_count": len(violations)
+            }
+
+    except Exception as e:
+        logger.error(f"Error validating accessibility: {e}")
+        return {"status": "error", "error": str(e)}
 
 
 async def check_responsive_layout(
@@ -150,7 +180,7 @@ async def check_responsive_layout(
     breakpoints: List[int],
     tool_context: ToolContext | None = None,
 ) -> dict[str, Any]:
-    """Validate responsive behavior across breakpoints.
+    """Validate responsive behavior and layout integrity across breakpoints.
 
     Args:
         url: URL to test.
@@ -181,17 +211,45 @@ async def check_responsive_layout(
                 page = await browser.new_page(viewport={"width": width, "height": 800})
                 await page.goto(target_url)
                 
-                # Check for horizontal scrollbar (common responsive issue)
+                # 1. Check for horizontal scrollbar (common responsive issue)
                 scroll_width = await page.evaluate("document.body.scrollWidth")
                 client_width = await page.evaluate("document.body.clientWidth")
                 
-                # Allow a small buffer for scrollbars
+                issues = []
                 if scroll_width > client_width + 1:
-                    results[str(width)] = "fail: horizontal scroll detected"
+                    issues.append("Horizontal scroll detected")
+
+                # 2. Check Layout Integrity (Overlaps)
+                # We check if header, main, and footer overlap
+                # This is a basic heuristic
+                elements = ["header", "main", "footer"]
+                boxes = {}
+                for el in elements:
+                    if await page.locator(el).count() > 0:
+                        box = await page.locator(el).bounding_box()
+                        if box:
+                            boxes[el] = box
+                
+                # Check for overlaps between header and main
+                if "header" in boxes and "main" in boxes:
+                    h = boxes["header"]
+                    m = boxes["main"]
+                    # Simple check: does header bottom extend past main top?
+                    # Note: This assumes standard block layout. Fixed headers might legitimately overlap.
+                    # We'll just check if they are completely on top of each other which is bad.
+                    if h['y'] + h['height'] > m['y'] + 50: # Allow some buffer
+                         # Only flag if main isn't pushed down
+                         pass # Complex to detect reliably without more context, skipping overlap check for now to avoid false positives
+
+                # 3. Check for zero-sized important elements
+                for el in elements:
+                    if el in boxes:
+                        if boxes[el]['width'] == 0 or boxes[el]['height'] == 0:
+                            issues.append(f"Element <{el}> has zero size")
+
+                if issues:
+                    results[str(width)] = f"fail: {', '.join(issues)}"
                 else:
-                    # Check if key elements are visible
-                    # This assumes we have some knowledge of what should be there, 
-                    # or we just check generic visibility
                     results[str(width)] = "pass"
                 
                 await page.close()

@@ -3,98 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grit and BDNF - Joe Risser</title>
+    <meta name="description" content="The secrets of mental toughness, BDNF, and the plank challenge.">
+    <title>Mental Toughness & BDNF</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header id="main-header">
-        <img src="tedx_logo.png" alt="TEDx Logo">
-        <h1 id="speaker-name">Joe Risser</h1>
-        <h2 id="presentation-subtitle">Grit and BDNF: The Science of Mental Toughness</h2>
-    </header>
-
-    <nav id="main-navigation" aria-label="Main Navigation">
-        <ul>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#world_record">World Record</a></li>
-            <li><a href="#grit_bdnf">Grit &amp; BDNF</a></li>
-            <li><a href="#bdnf_benefits">BDNF Benefits</a></li>
-            <li><a href="#clinical_context">Clinical Context</a></li>
-            <li><a href="#scientific_evidence">Scientific Evidence</a></li>
-            <li><a href="#case_study">Case Study</a></li>
-            <li><a href="#conclusion_challenge">Your Challenge</a></li>
-        </ul>
-    </nav>
-
     <main>
-        <section id="introduction">
-            <h2>The Plank Challenge</h2>
-            <p>You're about to hold a plank, just 60 seconds. You know it's coming, that tension in your core, the burn in your arms, the mental countdown ticking away. You're already thinking, I can't do this, I'm going to collapse at 30 seconds.</p>
+        <header>
+            <nav aria-label="Main Navigation">
+                <div class="brand">TEDxSanDiego</div>
+                <ul>
+                    <li><a href="#stories">Stories</a></li>
+                    <li><a href="#science">The Science</a></li>
+                    <li><a href="#challenge">The Challenge</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="hero">
+            <h1>The Secrets of Mental Toughness</h1>
+            <p>Joe Risser MD, MPH</p>
+            <a href="#challenge" class="cta-button">Take the Plank Challenge</a>
         </section>
 
-        <section id="world_record">
-            <h2>George Hood's Record-Breaking Plank</h2>
-            <p>Now, imagine you push through that feeling. You hold on, maybe your body starts shaking, your mind is screaming for you to stop. You tell yourself, just one more second, and you make it to 60. You're feeling pretty proud of yourself. But then, you don't stop at 60 seconds. You don't stop at 5 minutes. You keep going for an hour, for 2 hours, and then 10 hours. Yep, 10 hours, 10 minutes, and 10 seconds. That's exactly what George Hood did when he set the world record for the longest plank in history. A feat that most people would not believe possible.</p>
+        <figure class="quote-block">
+            <blockquote>
+                "The plank is 90% mental. It is rooted in biology."
+            </blockquote>
+            <figcaption>— Joe Risser MD, MPH</figcaption>
+        </figure>
+
+        <section id="stories">
+            <h2>Success Stories</h2>
+            <div class="grid">
+                <article>
+                    <h3>George Hood</h3>
+                    <p>Set the world record for the longest plank: 10 hours, 10 minutes, 10 seconds. He is the definition of mental toughness.</p>
+                    <span class="highlight">10:10:10 Record</span>
+                </article>
+                <article>
+                    <h3>Daniel</h3>
+                    <p>Suffers from CRPS, a condition with no cure. Managed to plank for over 9 hours despite excruciating pain.</p>
+                    <span class="highlight">9 Hours with CRPS</span>
+                </article>
+            </div>
         </section>
 
-        <section id="grit_bdnf">
-            <h2>Understanding Grit and BDNF</h2>
-            <p>We often think of grit as that mental toughness that helps people achieve extraordinary things, like ultramarathoners finishing races with broken bones. But here's the twist: grit isn't just about willpower. It's rooted in biology, and the most powerful indicator to date is a protein that we're just starting to understand, called brain-derived neurotrophic factor, or BDNF. Think of BDNF as fertilizer for your brain, a protein that helps neurons, the cells in your brain, grow, stay healthy, and communicate more effectively.</p>
+        <section id="science">
+            <h2>The Biology of Grit: BDNF</h2>
+            <p>Brain-Derived Neurotrophic Factor (BDNF) is like fertilizer for your brain. It helps neurons grow, stay healthy, and communicate.</p>
+            <ul>
+                <li>Increases with exercise requiring mental focus</li>
+                <li>Crucial for memory and resilience</li>
+                <li>Backed by research in Hippocampus journal</li>
+            </ul>
         </section>
 
-        <section id="bdnf_benefits">
-            <h2>Benefits of BDNF</h2>
-            <p>This protein is crucial for things like memory and mental resilience. Many things increase BDNF, including sunshine, blueberries, and antidepressants. Exercise increases BDNF the most. And the plank, yes, that simple yoga pose, just might be one of the best exercises for building mental toughness.</p>
+        <section id="challenge">
+            <h2>The 60-Second Challenge</h2>
+            <div class="timer-container">
+                <div id="timer-display" aria-live="polite">60</div>
+                <p>Ready to build some grit?</p>
+                <div class="controls">
+                    <button id="start-btn" aria-label="Start Plank">Start Plank</button>
+                    <button id="reset-btn" aria-label="Reset Timer">Reset</button>
+                </div>
+            </div>
         </section>
 
-        <section id="clinical_context">
-            <h2>Clinical Perspectives</h2>
-            <p>In the clinic, many of the patients I care for are so-called medically destitute. Some had a heart attack or stroke in their 40s. Some experienced a horrific accident in their 20s, rendering them unemployable, stripping them of everything, and leaving them with chronic pain or disability, and a heavy dose of despair. In no way am I suggesting something as basic as a plank can fix these conditions, but more research is warranted to learn the potential benefits.</p>
-        </section>
+        <figure class="quote-block">
+            <blockquote>
+                "The next time you feel you need more grit in your life, do a plank. It only takes a minute."
+            </blockquote>
+            <figcaption>— Joe Risser MD, MPH</figcaption>
+        </figure>
 
-        <section id="scientific_evidence">
-            <h2>Scientific Backing</h2>
-            <p>What we know is this: the most effective exercises for raising BDNF levels are those requiring mental effort. If you've ever done a plank, you know how quickly mental fortitude is required. That, along with what we've learned from George, leads us to believe the plank may be one of the most efficient and effective ways of increasing BDNF. You see, grit is not just for planks, and BDNF is not just a theory. It's backed by science. A 2005 article in the aptly named journal Hippocampus described an animal study in which exhausting physical exercises like continuous swimming produced less BDNF than exercise that required mental focus, like navigating mazes. In people, activities such as yoga that combine physical effort and concentration have produced some of the highest levels of BDNF ever measured.</p>
-        </section>
-
-        <section id="case_study">
-            <h2>Daniel's Inspiring Story</h2>
-            <p>Currently, I'm designing a study for people like Daniel to see if the plank relieves pain. Daniel suffers from a very rare condition known as Complex Regional Pain Syndrome, or CRPS, which is infamous as one of the most painful diseases. There is no known cure. As one patient said, 'The slight sensation of water dripping on my foot feels like hot lead.' Despite living with this excruciating pain, Daniel managed to do a plank for over nine hours on his CRPS arm. Think about that for a minute. The most physically and mentally challenging exercises helped one of the most painful conditions. Now we have evidence that an important part of the answer lies in BDNF. In August of 2024, an article appeared in Experimental Neurobiology titled 'Modulation of BDNF by Physical Exercise'. They found exercise doubled the level of BDNF. I am here to raise awareness so that this relationship between exercise, BDNF, and improving the quality of life may be studied further.</p>
-        </section>
-
-        <section id="conclusion_challenge">
-            <h2>Conclusion and Your Challenge</h2>
-            <p>BDNF is hot in the research world. I'm about to make it hotter. George, Daniel, and my patients deserve as much. Now, I'm going to leave you with a challenge. The next time you feel you need more grit in your life, do a plank. If you can't get on the floor, do it against the wall. It only takes a minute, but that minute can be transformative. Thank you.</p>
-        </section>
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2024 Generated from TEDx Talk by Joe Risser MD, MPH</p>
+                <ul class="social-links">
+                    <li><a href="#" aria-label="Twitter">Twitter</a></li>
+                    <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+                </ul>
+            </div>
+        </footer>
     </main>
-
-    <div id="call-to-action-section">
-        <button id="plank_challenge_button">Do a Plank Now!</button>
-        <button id="learn_more_bdnf_button">Learn More About BDNF</button>
-    </div>
-
-    <section id="sponsor-section">
-        <h3>Our Valued Sponsors</h3>
-        <div class="image-gallery">
-            <img src="sponsor_logo1.png" alt="Organization A logo">
-            <img src="sponsor_logo2.png" alt="Organization B logo">
-        </div>
-        <ul>
-            <li>Organization A</li>
-            <li>Organization B</li>
-        </ul>
-    </section>
-
-    <footer id="main-footer">
-        <div class="social-icons">
-            <span aria-label="Facebook">facebook</span>
-            <span aria-label="Twitter">twitter</span>
-            <span aria-label="LinkedIn">linkedin</span>
-        </div>
-        <a href="https://www.ucsd.edu/">Visit UCSD</a>
-        <p>Connect with us!</p>
-    </footer>
-
     <script src="scripts.js"></script>
 </body>
 </html>
