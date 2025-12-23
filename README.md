@@ -13,6 +13,15 @@ This project is an autonomous website creation system that transforms video walk
 - **Iterative Refinement**: Uses ADK's `LoopAgent` for continuous improvement based on validation feedback.
 - **Asset Extraction**: Automatically extracts high-quality images from the video stream to populate the website.
 
+## Gallery
+
+See the tool in action:
+
+| **Input Video** | **Generated Website** |
+| :---: | :---: |
+| <a href="https://www.youtube.com/watch?v=P1wSY4rWKgs"><img src="docs/images/output.gif" width="100%" alt="Video Input"></a> | <img src="docs/images/generated_website.jpeg" width="100%" alt="Generated Website"> |
+| *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)* | *Generated in < 2 minutes* |
+
 ## Use Cases
 
 This tool is designed to dramatically accelerate the "idea-to-code" and "content-to-web" workflows.
@@ -172,11 +181,3 @@ If you encounter `NotImplementedError` related to asyncio loops:
 ### Quota Errors (429)
 - The application includes a `ModelFallbackPlugin` that automatically switches to lower-tier models (Gemini 2.5 Flash -> 2.0 Flash) if the primary model hits a quota limit.
 - It also includes a `StaggerPlugin` to prevent parallel agents from hitting the API simultaneously.
-
-## Gallery
-
-*(Add screenshots of input videos and generated websites here)*
-
-| Input Video | Generated Website |
-| :---: | :---: |
-| ![Video Thumbnail](path/to/thumbnail.jpg) | ![Website Screenshot](path/to/screenshot.jpg) |
