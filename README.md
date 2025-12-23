@@ -19,7 +19,7 @@ See the tool in action:
 
 | **Input Video** | **Generated Website** |
 | :---: | :---: |
-| <a href="https://www.youtube.com/watch?v=P1wSY4rWKgs"><img src="docs/images/output.gif" width="100%" alt="Video Input"></a> | <img src="docs/images/generated_website.jpeg" width="100%" alt="Generated Website"> |
+| [![Video Input](docs/images/output.gif)](https://www.youtube.com/watch?v=P1wSY4rWKgs) | ![Generated Website](docs/images/generated_website.jpeg) |
 | *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)* | *Generated in < 2 minutes* |
 
 ## Use Cases
