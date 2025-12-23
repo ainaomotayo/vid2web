@@ -1,110 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birth, Life, Death: A Stop-Motion Allegory</title>
+    <title>Birth, Life, Death | Allison Zelle</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@400;700&family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #000;
+            color: #fff;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-sans {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-script {
+            font-family: 'Dancing Script', cursive;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+    </style>
 </head>
-<body class="font-sans bg-black text-white">
-    <nav class="bg-black text-white p-4">
-    <div class="container mx-auto flex flex-wrap justify-between items-center">
-        <a href="#" class="text-xl font-bold text-orange-600">Birth, Life, Death</a>
-        <div class="block lg:hidden">
-            <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-white border-white hover:text-orange-600 hover:border-orange-600">
-                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-            </button>
-        </div>
-        <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden" id="nav-content">
-            <ul class="text-base lg:flex flex-1 items-center justify-end">
-                <li><a href="#home" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Home</a></li>
-                <li><a href="#about" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">About the Film</a></li>
-                <li><a href="#behind-the-scenes" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Behind the Scenes</a></li>
-                <li><a href="#meet-the-creator" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Meet the Creator</a></li>
-                <li><a href="#contact" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600">Contact</a></li>
-            </ul>
-            <div class="ml-4 flex space-x-4 mt-4 lg:mt-0">
-                <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-orange-600 mt-4 lg:mt-0">Watch the Full Short Film</a>
+<body class="bg-black text-white selection:bg-[#E06C2D] selection:text-white">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-black/80 backdrop-blur-md border-b border-zinc-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <div class="flex-shrink-0 flex flex-col">
+            <span class="text-2xl font-serif tracking-[0.2em] text-white">RIT</span>
+            <div class="h-1 w-12 bg-[#E06C2D]"></div>
+            <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-sans">School of Film & Animation</span>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-8 font-sans">
+              <a href="#hero" class="text-zinc-300 hover:text-[#E06C2D] transition-colors px-3 py-2 text-sm font-medium tracking-widest uppercase">Home</a>
+              <a href="#about-the-film" class="text-zinc-300 hover:text-[#E06C2D] transition-colors px-3 py-2 text-sm font-medium tracking-widest uppercase">About</a>
+              <a href="#visual-journey" class="text-zinc-300 hover:text-[#E06C2D] transition-colors px-3 py-2 text-sm font-medium tracking-widest uppercase">Journey</a>
+              <a href="#the-craft" class="text-zinc-300 hover:text-[#E06C2D] transition-colors px-3 py-2 text-sm font-medium tracking-widest uppercase">Craft</a>
+              <a href="#artist-credits" class="text-zinc-300 hover:text-[#E06C2D] transition-colors px-3 py-2 text-sm font-medium tracking-widest uppercase">Artist</a>
             </div>
+          </div>
+          <div class="md:hidden">
+            <button id="mobile-menu-button" class="text-zinc-400 hover:text-white focus:outline-none" aria-label="Toggle Menu">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </button>
+          </div>
         </div>
-    </div>
-</nav>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden bg-black border-b border-zinc-800">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center font-sans">
+          <a href="#hero" class="text-zinc-300 hover:text-[#E06C2D] block px-3 py-2 text-base font-medium">Home</a>
+          <a href="#about-the-film" class="text-zinc-300 hover:text-[#E06C2D] block px-3 py-2 text-base font-medium">About</a>
+          <a href="#visual-journey" class="text-zinc-300 hover:text-[#E06C2D] block px-3 py-2 text-base font-medium">Journey</a>
+          <a href="#the-craft" class="text-zinc-300 hover:text-[#E06C2D] block px-3 py-2 text-base font-medium">Craft</a>
+          <a href="#artist-credits" class="text-zinc-300 hover:text-[#E06C2D] block px-3 py-2 text-base font-medium">Artist</a>
+        </div>
+      </div>
+    </nav>
 
     <main>
-        <section id="home" class="relative bg-black text-white h-screen flex items-center justify-center overflow-hidden">
-        <img src="assets/image_1.jpg" alt="Stop-Motion Allegory Scene" class="absolute inset-0 w-full h-full object-cover opacity-50">
-        <div class="relative z-10 text-center p-4">
-            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-4 text-orange-600">Birth, Life, Death: A Stop-Motion Allegory</h1>
-            <p class="text-xl md:text-2xl font-sans mb-8">An introspective journey through the cycles of existence, meticulously crafted with paper and animation.</p>
-            <a href="#" class="bg-orange-700 hover:bg-orange-800 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300">Watch the Full Short Film</a>
-        </div>
-    </section>
-
-        <section id="about" class="bg-neutral-900 text-white py-16 px-4">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-serif font-bold mb-8 text-orange-600">About the Film</h2>
-            <p class="text-lg leading-relaxed max-w-3xl mx-auto font-sans">
-                This poignant stop-motion animated short, 'Birth, Life, Death,' delves into universal themes using intricate paper artistry. Produced by a student at the Rochester Institute of Technology's School of Film and Animation, the film unfolds through a series of evocative scenes: from the symbolic birth of an eye within a golden egg to the growth of a barren tree amidst a landscape of shredded words, and ultimately, the fiery dissolution of form, revealing an underlying structure. Each frame is a testament to meticulous craft, inviting viewers to reflect on creation, presence, and inevitable transformation.
+        <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+          <div class="absolute inset-0 opacity-40">
+            <img src="assets/image_1.jpg" alt="Film Background" class="w-full h-full object-cover grayscale">
+          </div>
+          <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-6xl md:text-8xl font-serif text-white mb-6 tracking-tight animate-fade-in-up">
+              Birth, Life, Death
+            </h1>
+            <p class="text-xl md:text-2xl text-zinc-300 mb-10 font-serif italic tracking-wide animate-fade-in-up delay-200">
+              An allegorical stop-motion journey exploring creation, existence, and transformation through intricate paper artistry.
             </p>
-        </div>
-    </section>
-
-        <section class="bg-black text-white py-16 px-4">
-        <div class="container mx-auto">
-            <h2 class="text-4xl font-serif font-bold text-center mb-12 text-orange-600">Explore Key Scenes</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
-                    <img src="assets/image_2.jpg" alt="Paper Cityscapes" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Paper Cityscapes</h3>
-                        <p class="text-neutral-300">Explore an atmospheric miniature world of buildings crafted from newspaper, illuminated by soft lamplight, and inhabited by a curious black cat silhouette.</p>
-                    </div>
-                </div>
-                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
-                    <img src="assets/image_3.jpg" alt="The Eye of Existence" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">The Eye of Existence</h3>
-                        <p class="text-neutral-300">Witness the powerful metaphor of a golden egg cracking open to reveal a human eye, symbolizing awakening and perception amidst a world of narratives.</p>
-                    </div>
-                </div>
-                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
-                    <img src="assets/image_4.jpg" alt="Literary Landscapes" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Literary Landscapes</h3>
-                        <p class="text-neutral-300">Journey through a unique environment where a lone boat, holding a bare tree, rests upon a vast sea of shredded paper text, suggesting life's rootedness in stories and knowledge.</p>
-                    </div>
-                </div>
-                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
-                    <img src="assets/image_5.jpg" alt="Fiery Transformation" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Fiery Transformation</h3>
-                        <p class="text-neutral-300">Experience the intense sequence of a paper form consumed by flames, culminating in ash and the stark beauty of a skeletal wireframe, representing the cycle of destruction and emergence.</p>
-                    </div>
-                </div>
-                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
-                    <img src="assets/image_6.jpg" alt="Student Production" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Student Production</h3>
-                        <p class="text-neutral-300">A showcase of talent from the School of Film and Animation at Rochester Institute of Technology, highlighting innovative storytelling and artistic execution.</p>
-                    </div>
-                </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400 font-sans">
+              <a href="#" class="bg-[#E06C2D] hover:bg-[#c45a22] text-black px-8 py-4 rounded-none transition-all duration-300 uppercase tracking-widest text-sm font-bold">
+                Watch the Full Film
+              </a>
+              <a href="#about-the-film" class="border border-white hover:bg-white hover:text-black text-white px-8 py-4 rounded-none transition-all duration-300 uppercase tracking-widest text-sm font-bold">
+                Explore the Journey
+              </a>
             </div>
-        </div>
-    </section>
+          </div>
+          <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <a href="#about-the-film" class="text-zinc-400 hover:text-white transition-colors" aria-label="Scroll to about section">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </a>
+          </div>
+        </section>
+
+        <section id="about-the-film" class="py-24 bg-black border-y border-zinc-900">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div class="order-2 lg:order-1">
+                <h2 class="text-4xl font-serif text-white mb-8 border-l-4 border-[#E06C2D] pl-6 uppercase tracking-wider">About the Film</h2>
+                <div class="space-y-6 text-zinc-400 text-lg leading-relaxed font-serif">
+                  <p>
+                    This captivating stop-motion animated film, 'Birth, Life, Death,' is a profound visual narrative that delves into the universal cycle of existence. 
+                  </p>
+                  <p>
+                    Utilizing innovative paper-based sculpting and intricate animation techniques, the film brings to life a world of fragility and transformation. Each scene is meticulously crafted, from a mysterious cityscape to symbolic natural landscapes, reflecting the delicate balance of creation and decay.
+                  </p>
+                  <p>
+                    It is a thought-provoking exploration of life's transient beauty and ultimate metamorphosis. This student-produced work from the School of Film and Animation at Rochester Institute of Technology showcases a unique artistic vision.
+                  </p>
+                </div>
+                <div class="mt-10">
+                  <a href="#artist-credits" class="text-[#E06C2D] font-bold uppercase tracking-widest text-sm hover:translate-x-2 transition-transform inline-flex items-center group font-sans">
+                    Learn More About Allison Zelle
+                    <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="order-1 lg:order-2 relative group">
+                <div class="absolute -inset-4 bg-[#E06C2D]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                <img src="assets/image_2.jpg" alt="Urban Diorama" class="relative z-10 w-full h-auto grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl border border-zinc-800">
+                <div class="absolute bottom-4 right-4 z-20 text-white font-serif italic text-sm bg-black/50 backdrop-blur-sm px-3 py-1">
+                  Hand-crafted Urban Diorama
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="visual-journey" class="py-24 bg-[#050505]">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
+            <h2 class="text-4xl font-serif text-white mb-4 uppercase tracking-widest">A Cinematic Journey</h2>
+            <p class="text-zinc-400 font-serif italic text-xl">Six key frames exploring the transition from birth to metamorphosis.</p>
+          </div>
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div class="group overflow-hidden relative border border-zinc-800">
+                <img src="assets/image_1.jpg" alt="The Beginning" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p class="text-white font-serif italic text-lg">The Beginning: Urban Shadows</p>
+                </div>
+              </div>
+              <div class="group overflow-hidden relative border border-zinc-800">
+                <img src="assets/image_2.jpg" alt="Handcrafted Worlds" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p class="text-white font-serif italic text-lg">Handcrafted Architecture</p>
+                </div>
+              </div>
+              <div class="group overflow-hidden relative border border-zinc-800">
+                <img src="assets/image_3.jpg" alt="The Origin" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p class="text-white font-serif italic text-lg">The Origin: The Golden Egg</p>
+                </div>
+              </div>
+              <div class="group overflow-hidden relative border border-zinc-800">
+                <img src="assets/image_4.jpg" alt="Growth" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p class="text-white font-serif italic text-lg">Growth: Paper Terrain</p>
+                </div>
+              </div>
+              <div class="group overflow-hidden relative border border-zinc-800">
+                <img src="assets/image_5.jpg" alt="Observation" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p class="text-white font-serif italic text-lg">Observation: The Eye</p>
+                </div>
+              </div>
+              <div class="group overflow-hidden relative border-2 border-[#E06C2D]/50">
+                <img src="assets/image_6.jpg" alt="Metamorphosis" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-[#E06C2D]/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+                  <p class="text-white font-serif italic text-xl font-bold">The Metamorphosis</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="the-craft" class="py-24 bg-black">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-zinc-950 p-8 md:p-16 border border-zinc-900 shadow-2xl relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-[#E06C2D]/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+              <h2 class="text-4xl font-serif text-white mb-16 text-center uppercase tracking-widest">The Artistry Behind the Frames</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-16 relative z-10">
+                <div class="space-y-12">
+                  <div class="flex gap-8 group">
+                    <div class="flex-shrink-0 w-16 h-16 bg-zinc-900 flex items-center justify-center text-[#E06C2D] border border-zinc-800 font-bold text-xl group-hover:bg-[#E06C2D] group-hover:text-white transition-all duration-300">01</div>
+                    <div>
+                      <h3 class="text-xl font-bold text-white mb-3 uppercase tracking-wide font-sans">Intricate Stop-Motion Animation</h3>
+                      <p class="text-zinc-400 font-serif leading-relaxed">Experience a unique visual style brought to life through precise frame-by-frame animation, showcasing fluid movement within static, handcrafted environments.</p>
+                    </div>
+                  </div>
+                  <div class="flex gap-8 group">
+                    <div class="flex-shrink-0 w-16 h-16 bg-zinc-900 flex items-center justify-center text-[#E06C2D] border border-zinc-800 font-bold text-xl group-hover:bg-[#E06C2D] group-hover:text-white transition-all duration-300">02</div>
+                    <div>
+                      <h3 class="text-xl font-bold text-white mb-3 uppercase tracking-wide font-sans">Paper Artistry & Sculpture</h3>
+                      <p class="text-zinc-400 font-serif leading-relaxed">Witness a world constructed from paper, where every detail – from urban architecture to natural elements – is sculpted from books and discarded texts.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-12">
+                  <div class="flex gap-8 group">
+                    <div class="flex-shrink-0 w-16 h-16 bg-zinc-900 flex items-center justify-center text-[#E06C2D] border border-zinc-800 font-bold text-xl group-hover:bg-[#E06C2D] group-hover:text-white transition-all duration-300">03</div>
+                    <div>
+                      <h3 class="text-xl font-bold text-white mb-3 uppercase tracking-wide font-sans">Symbolic Visual Storytelling</h3>
+                      <p class="text-zinc-400 font-serif leading-relaxed">Follow a journey rich in symbolism, with elements like a hatching eye, a burgeoning tree, and a burning form representing profound stages of existence.</p>
+                    </div>
+                  </div>
+                  <div class="flex gap-8 group">
+                    <div class="flex-shrink-0 w-16 h-16 bg-zinc-900 flex items-center justify-center text-[#E06C2D] border border-zinc-800 font-bold text-xl group-hover:bg-[#E06C2D] group-hover:text-white transition-all duration-300">04</div>
+                    <div>
+                      <h3 class="text-xl font-bold text-white mb-3 uppercase tracking-wide font-sans">Universal Themes</h3>
+                      <p class="text-zinc-400 font-serif leading-relaxed">Engage with a philosophical narrative that contemplates 'Birth, Life, Death' through allegorical imagery, inviting viewers to reflect on permanence.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="artist-credits" class="py-24 bg-[#F8EDE7]">
+          <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-[#8B4513] font-serif italic text-xl mb-4 block">A student production by</span>
+            <h2 class="text-6xl font-serif text-black mb-6">Allison Zelle</h2>
+            <div class="w-24 h-1 bg-[#E06C2D] mx-auto mb-10"></div>
+            <p class="text-zinc-800 text-xl font-serif mb-16 max-w-2xl mx-auto leading-relaxed">
+              Produced at the <span class="font-bold">Rochester Institute of Technology</span> School of Film and Animation. This project represents a culmination of experimental techniques and deep philosophical inquiry.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left border-t border-zinc-300 pt-16">
+              <div>
+                <h3 class="text-zinc-600 uppercase tracking-[0.2em] text-xs font-bold mb-6 font-sans">Core Credits</h3>
+                <ul class="text-black font-serif space-y-4 text-lg">
+                  <li class="flex justify-between border-b border-zinc-200 pb-2"><span>Director</span> <span class="font-bold">Allison Zelle</span></li>
+                  <li class="flex justify-between border-b border-zinc-200 pb-2"><span>Animation</span> <span class="font-bold">Allison Zelle</span></li>
+                  <li class="flex justify-between border-b border-zinc-200 pb-2"><span>Set Design</span> <span class="font-bold">Paper Artistry Team</span></li>
+                  <li class="flex justify-between border-b border-zinc-200 pb-2"><span>Score</span> <span class="font-bold">Original Composition</span></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="text-zinc-600 uppercase tracking-[0.2em] text-xs font-bold mb-6 font-sans">Academic Context</h3>
+                <ul class="text-black font-serif space-y-4 text-lg">
+                  <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-[#E06C2D]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0z"></path></svg> RIT School of Film & Animation</li>
+                  <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-[#E06C2D]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"></path></svg> Experimental Animation Dept.</li>
+                  <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-[#E06C2D]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"></path></svg> 2024 Showcase Selection</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
     </main>
 
-    <footer class="bg-neutral-900 text-white py-8 px-4">
-    <div class="container mx-auto text-center">
-        <p class="text-sm">&copy; <span id="year"></span> Birth, Life, Death. All rights reserved.</p>
-        <p class="text-xs mt-2">A project by a student at the Rochester Institute of Technology's School of Film and Animation.</p>
-    </div>
-</footer>
+    <footer id="footer" class="bg-black py-20 border-t border-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex flex-col items-center mb-12">
+          <span class="text-3xl font-serif tracking-[0.2em] text-white">RIT</span>
+          <div class="h-1 w-16 bg-[#E06C2D] my-2"></div>
+          <span class="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-sans">School of Film & Animation</span>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-8 mb-12 font-sans">
+          <a href="#" class="text-zinc-400 hover:text-[#E06C2D] transition-colors uppercase tracking-widest text-xs font-bold">Instagram</a>
+          <a href="#" class="text-zinc-400 hover:text-[#E06C2D] transition-colors uppercase tracking-widest text-xs font-bold">Vimeo</a>
+          <a href="#" class="text-zinc-400 hover:text-[#E06C2D] transition-colors uppercase tracking-widest text-xs font-bold">RIT Portfolio</a>
+          <a href="#" class="text-zinc-400 hover:text-[#E06C2D] transition-colors uppercase tracking-widest text-xs font-bold">Contact</a>
+        </div>
 
-    <script src="script.js"></script>
+        <div class="text-zinc-400 text-sm font-serif">
+          <p>&copy; <span id="year"></span> Rochester Institute of Technology. All Rights Reserved.</p>
+          <p class="mt-4 text-[9px] uppercase tracking-[0.4em] text-zinc-300">Artistry • Transformation • Metamorphosis</p>
+        </div>
+      </div>
+    </footer>
+
     <script>
-    document.getElementById('nav-toggle').onclick = function() {
-        document.getElementById('nav-content').classList.toggle('hidden');
-    }
-</script>
+        // Set dynamic year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-button'); 
+        const menu = document.getElementById('mobile-menu'); 
+        menuBtn.addEventListener('click', () => { 
+            menu.classList.toggle('hidden'); 
+        });
+
+        // Navbar appearance on scroll
+        window.addEventListener('scroll', () => { 
+            const nav = document.querySelector('nav'); 
+            if (window.scrollY > 50) { 
+                nav.classList.add('bg-black'); 
+                nav.classList.remove('bg-black/80'); 
+            } else { 
+                nav.classList.add('bg-black/80'); 
+                nav.classList.remove('bg-black'); 
+            } 
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => { 
+            anchor.addEventListener('click', function (e) { 
+                const targetHref = this.getAttribute('href');
+                if (targetHref.startsWith('#')) {
+                    const targetSelector = targetHref.length > 1 ? targetHref : null;
+                    if (targetSelector) {
+                        e.preventDefault();
+                        const target = document.querySelector(targetSelector);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' }); 
+                            // Close mobile menu if open
+                            menu.classList.add('hidden');
+                        }
+                    }
+                }
+            }); 
+        });
+    </script>
 </body>
 </html>

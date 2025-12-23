@@ -14,8 +14,8 @@ from .plugins.model_fallback_plugin import ModelFallbackPlugin
 from .plugins.stagger_plugin import StaggerPlugin
 from .plugins.context_pruning_plugin import ContextPruningPlugin
 
-# Use Gemini 2.5 Flash for better parallel throughput
-MODEL_NAME = "gemini-2.5-flash"
+# Use gemini-3-flash-preview for better parallel throughput
+MODEL_NAME = "gemini-3-flash-preview"
 
 # Configure retry options for robustness against quota limits
 retry_options = types.HttpRetryOptions(

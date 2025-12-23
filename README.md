@@ -17,10 +17,17 @@ This project is an autonomous website creation system that transforms video walk
 
 See the tool in action:
 
-|                                                        **Input Video**                                                         | **Generated Website** |
-|:------------------------------------------------------------------------------------------------------------------------------:| :---: |
+| **Input Video** | **Generated Website** |
+| :---: | :---: |
 | <a href="https://www.youtube.com/watch?v=P1wSY4rWKgs" target="_blank"><img src="docs/images/output.gif" alt="Video Input"></a> | ![Generated Website](docs/images/generated_website.jpeg) |
-|                             *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)*                              | *Generated in < 2 minutes* |
+| *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)* | *Generated in < 2 minutes* |
+
+### Model Comparison: Gemini 2.5 vs 3.0
+
+| **Gemini 2.5 Flash** | **Gemini 3.0 Flash** |
+| :---: | :---: |
+| ![Gemini 2.5 Result](docs/images/generated_website.jpeg) | ![Gemini 3.0 Result](docs/images/generated_page_3.jpeg) |
+| *Standard Generation* | *Enhanced Detail & Interactivity*<br>*(Note: Hover over images to see color transition effect)* |
 
 ## Use Cases
 
