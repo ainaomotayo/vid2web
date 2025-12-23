@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 # --- Configuration ---
 # Use the same YouTube video from our tests
 VIDEO_URL = "https://www.youtube.com/watch?v=rNxC16mlO60"
-OUTPUT_DIR = Path("output/generated_website")
 
 async def run_with_retry(runner, user_id, session_id, message, max_retries=5):
     """Runs the agent with exponential backoff and model fallback logic."""
@@ -32,7 +31,17 @@ async def run_with_retry(runner, user_id, session_id, message, max_retries=5):
                 session_id=session_id,
                 new_message=message,
             ):
-                if event.is_final_response():
+                # Check for tool call by inspecting the content directly
+                is_tool_call = False
+                if event.content and event.content.parts:
+                    for part in event.content.parts:
+                        if hasattr(part, 'function_call') and part.function_call:
+                            is_tool_call = True
+                            tool_name = part.function_call.name
+                            logger.info(f"🛠️ Calling tool: {tool_name}...")
+                            break 
+                
+                if event.is_final_response() and not is_tool_call:
                     # Safely access content and parts
                     if event.content and event.content.parts:
                         final_response = event.content.parts[0].text or ""
@@ -70,15 +79,10 @@ async def run_with_retry(runner, user_id, session_id, message, max_retries=5):
 
 async def main():
     """
-    Runs the full video-to-website pipeline and saves the output to the
-    `output/generated_website` directory.
+    Runs the full video-to-website pipeline.
     """
-    logger.info("--- Starting Video-to-Website Generation ---")
+    logger.info("--- Starting Video-to-Website Generation (Golden Run) ---")
     
-    # Ensure the output directory exists
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Output will be saved to: {OUTPUT_DIR.resolve()}")
-
     # 1. Check for API Key
     if not os.environ.get("GOOGLE_API_KEY"):
         logger.error("FATAL: GOOGLE_API_KEY environment variable not set.")
@@ -99,7 +103,10 @@ async def main():
     session = await runner.session_service.create_session(
         app_name="video_to_website_example",
         user_id="example_user",
-        state={"input_video_path": VIDEO_URL},
+        state={
+            "input_video_path": VIDEO_URL,
+            "target_framework": "html" # Default to HTML for basic run
+        },
     )
     logger.info(f"ADK Session created: {session.id}")
     
@@ -107,7 +114,7 @@ async def main():
     message = types.Content(
         role="user",
         parts=[types.Part.from_text(
-            text=f"Generate a website from the video at {VIDEO_URL}. Save the files to the '{OUTPUT_DIR}' directory."
+            text=f"Generate a website from the video at {VIDEO_URL}."
         )],
     )
     
@@ -124,24 +131,23 @@ async def main():
         )
         final_state = updated_session.state
 
-        # 7. Save the generated files from the state
-        html = final_state.get("generated_html")
-        css = final_state.get("generated_css")
-        js = final_state.get("generated_js")
-
-        if html:
-            (OUTPUT_DIR / "index.html").write_text(html, encoding="utf-8")
-            logger.info("✅ index.html saved.")
-        if css:
-            (OUTPUT_DIR / "styles.css").write_text(css, encoding="utf-8")
-            logger.info("✅ styles.css saved.")
-        if js:
-            (OUTPUT_DIR / "scripts.js").write_text(js, encoding="utf-8")
-            logger.info("✅ scripts.js saved.")
-
-        logger.info("\n--- Generation Complete! ---")
-        logger.info(f"You can find the generated website in the '{OUTPUT_DIR.resolve()}' directory.")
-        logger.info(f"To view it, open '{OUTPUT_DIR.resolve() / 'index.html'}' in your browser.")
+        # 7. Verify Output
+        output_dir = Path(f"output/{session.id}/generated_website")
+        if output_dir.exists():
+            logger.info("\n--- Generation Complete! ---")
+            logger.info(f"Output Directory: {output_dir.resolve()}")
+            
+            files = list(output_dir.glob("*"))
+            logger.info(f"Generated Files: {[f.name for f in files]}")
+            
+            assets_dir = output_dir / "assets"
+            if assets_dir.exists():
+                assets = list(assets_dir.glob("*"))
+                logger.info(f"Extracted Assets: {len(assets)} images found.")
+            
+            logger.info(f"To view it, open '{output_dir.resolve() / 'index.html'}' in your browser.")
+        else:
+            logger.error("Output directory was not created. Something went wrong.")
 
     except Exception as e:
         logger.error(f"An error occurred during agent execution: {e}", exc_info=True)

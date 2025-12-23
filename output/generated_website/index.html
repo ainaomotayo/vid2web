@@ -3,91 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The secrets of mental toughness, BDNF, and the plank challenge.">
-    <title>Mental Toughness & BDNF</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Birth, Life, Death: A Stop-Motion Allegory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <main>
-        <header>
-            <nav aria-label="Main Navigation">
-                <div class="brand">TEDxSanDiego</div>
-                <ul>
-                    <li><a href="#stories">Stories</a></li>
-                    <li><a href="#science">The Science</a></li>
-                    <li><a href="#challenge">The Challenge</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <section id="hero">
-            <h1>The Secrets of Mental Toughness</h1>
-            <p>Joe Risser MD, MPH</p>
-            <a href="#challenge" class="cta-button">Take the Plank Challenge</a>
-        </section>
-
-        <figure class="quote-block">
-            <blockquote>
-                "The plank is 90% mental. It is rooted in biology."
-            </blockquote>
-            <figcaption>— Joe Risser MD, MPH</figcaption>
-        </figure>
-
-        <section id="stories">
-            <h2>Success Stories</h2>
-            <div class="grid">
-                <article>
-                    <h3>George Hood</h3>
-                    <p>Set the world record for the longest plank: 10 hours, 10 minutes, 10 seconds. He is the definition of mental toughness.</p>
-                    <span class="highlight">10:10:10 Record</span>
-                </article>
-                <article>
-                    <h3>Daniel</h3>
-                    <p>Suffers from CRPS, a condition with no cure. Managed to plank for over 9 hours despite excruciating pain.</p>
-                    <span class="highlight">9 Hours with CRPS</span>
-                </article>
-            </div>
-        </section>
-
-        <section id="science">
-            <h2>The Biology of Grit: BDNF</h2>
-            <p>Brain-Derived Neurotrophic Factor (BDNF) is like fertilizer for your brain. It helps neurons grow, stay healthy, and communicate.</p>
-            <ul>
-                <li>Increases with exercise requiring mental focus</li>
-                <li>Crucial for memory and resilience</li>
-                <li>Backed by research in Hippocampus journal</li>
+<body class="font-sans bg-black text-white">
+    <nav class="bg-black text-white p-4">
+    <div class="container mx-auto flex flex-wrap justify-between items-center">
+        <a href="#" class="text-xl font-bold text-orange-600">Birth, Life, Death</a>
+        <div class="block lg:hidden">
+            <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-white border-white hover:text-orange-600 hover:border-orange-600">
+                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+            </button>
+        </div>
+        <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden" id="nav-content">
+            <ul class="text-base lg:flex flex-1 items-center justify-end">
+                <li><a href="#home" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Home</a></li>
+                <li><a href="#about" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">About the Film</a></li>
+                <li><a href="#behind-the-scenes" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Behind the Scenes</a></li>
+                <li><a href="#meet-the-creator" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600 mr-4">Meet the Creator</a></li>
+                <li><a href="#contact" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-orange-600">Contact</a></li>
             </ul>
-        </section>
+            <div class="ml-4 flex space-x-4 mt-4 lg:mt-0">
+                <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-orange-600 mt-4 lg:mt-0">Watch the Full Short Film</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-        <section id="challenge">
-            <h2>The 60-Second Challenge</h2>
-            <div class="timer-container">
-                <div id="timer-display" aria-live="polite">60</div>
-                <p>Ready to build some grit?</p>
-                <div class="controls">
-                    <button id="start-btn" aria-label="Start Plank">Start Plank</button>
-                    <button id="reset-btn" aria-label="Reset Timer">Reset</button>
+    <main>
+        <section id="home" class="relative bg-black text-white h-screen flex items-center justify-center overflow-hidden">
+        <img src="assets/image_1.jpg" alt="Stop-Motion Allegory Scene" class="absolute inset-0 w-full h-full object-cover opacity-50">
+        <div class="relative z-10 text-center p-4">
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-4 text-orange-600">Birth, Life, Death: A Stop-Motion Allegory</h1>
+            <p class="text-xl md:text-2xl font-sans mb-8">An introspective journey through the cycles of existence, meticulously crafted with paper and animation.</p>
+            <a href="#" class="bg-orange-700 hover:bg-orange-800 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300">Watch the Full Short Film</a>
+        </div>
+    </section>
+
+        <section id="about" class="bg-neutral-900 text-white py-16 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-serif font-bold mb-8 text-orange-600">About the Film</h2>
+            <p class="text-lg leading-relaxed max-w-3xl mx-auto font-sans">
+                This poignant stop-motion animated short, 'Birth, Life, Death,' delves into universal themes using intricate paper artistry. Produced by a student at the Rochester Institute of Technology's School of Film and Animation, the film unfolds through a series of evocative scenes: from the symbolic birth of an eye within a golden egg to the growth of a barren tree amidst a landscape of shredded words, and ultimately, the fiery dissolution of form, revealing an underlying structure. Each frame is a testament to meticulous craft, inviting viewers to reflect on creation, presence, and inevitable transformation.
+            </p>
+        </div>
+    </section>
+
+        <section class="bg-black text-white py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-serif font-bold text-center mb-12 text-orange-600">Explore Key Scenes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/image_2.jpg" alt="Paper Cityscapes" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Paper Cityscapes</h3>
+                        <p class="text-neutral-300">Explore an atmospheric miniature world of buildings crafted from newspaper, illuminated by soft lamplight, and inhabited by a curious black cat silhouette.</p>
+                    </div>
+                </div>
+                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/image_3.jpg" alt="The Eye of Existence" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">The Eye of Existence</h3>
+                        <p class="text-neutral-300">Witness the powerful metaphor of a golden egg cracking open to reveal a human eye, symbolizing awakening and perception amidst a world of narratives.</p>
+                    </div>
+                </div>
+                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/image_4.jpg" alt="Literary Landscapes" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Literary Landscapes</h3>
+                        <p class="text-neutral-300">Journey through a unique environment where a lone boat, holding a bare tree, rests upon a vast sea of shredded paper text, suggesting life's rootedness in stories and knowledge.</p>
+                    </div>
+                </div>
+                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/image_5.jpg" alt="Fiery Transformation" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Fiery Transformation</h3>
+                        <p class="text-neutral-300">Experience the intense sequence of a paper form consumed by flames, culminating in ash and the stark beauty of a skeletal wireframe, representing the cycle of destruction and emergence.</p>
+                    </div>
+                </div>
+                <div class="bg-neutral-900 rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/image_6.jpg" alt="Student Production" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Student Production</h3>
+                        <p class="text-neutral-300">A showcase of talent from the School of Film and Animation at Rochester Institute of Technology, highlighting innovative storytelling and artistic execution.</p>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <figure class="quote-block">
-            <blockquote>
-                "The next time you feel you need more grit in your life, do a plank. It only takes a minute."
-            </blockquote>
-            <figcaption>— Joe Risser MD, MPH</figcaption>
-        </figure>
-
-        <footer>
-            <div class="footer-content">
-                <p>&copy; 2024 Generated from TEDx Talk by Joe Risser MD, MPH</p>
-                <ul class="social-links">
-                    <li><a href="#" aria-label="Twitter">Twitter</a></li>
-                    <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
-                </ul>
-            </div>
-        </footer>
+        </div>
+    </section>
     </main>
-    <script src="scripts.js"></script>
+
+    <footer class="bg-neutral-900 text-white py-8 px-4">
+    <div class="container mx-auto text-center">
+        <p class="text-sm">&copy; <span id="year"></span> Birth, Life, Death. All rights reserved.</p>
+        <p class="text-xs mt-2">A project by a student at the Rochester Institute of Technology's School of Film and Animation.</p>
+    </div>
+</footer>
+
+    <script src="script.js"></script>
+    <script>
+    document.getElementById('nav-toggle').onclick = function() {
+        document.getElementById('nav-content').classList.toggle('hidden');
+    }
+</script>
 </body>
 </html>

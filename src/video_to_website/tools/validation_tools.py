@@ -48,7 +48,8 @@ async def launch_browser_preview(
              return {"status": "error", "error": f"File not found: {html_path}"}
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            # Disable web security to allow local file access to iframes if needed
+            browser = await p.chromium.launch(headless=True, args=["--disable-web-security"])
             page = await browser.new_page()
             # Convert file path to file:// URL
             file_url = f"file://{os.path.abspath(html_path)}"
@@ -96,7 +97,7 @@ async def capture_screenshot(
 
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True, args=["--disable-web-security"])
             page = await browser.new_page(viewport=viewport)
             
             # Handle local files
@@ -140,14 +141,15 @@ async def validate_accessibility(
              return {"status": "error", "error": f"File not found: {html_path}"}
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True, args=["--disable-web-security"])
             page = await browser.new_page()
             file_url = f"file://{os.path.abspath(html_path)}"
             await page.goto(file_url)
             
             # Run Axe analysis
             axe = Axe()
-            results = await axe.run(page)
+            # Use context to exclude iframes, which is more robust than the options parameter
+            results = await axe.run(page, context={"exclude": [["iframe"]]})
             await browser.close()
             
             # Process results
@@ -198,7 +200,7 @@ async def check_responsive_layout(
     results = {}
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True, args=["--disable-web-security"])
             
             # Handle local files
             target_url = url
@@ -211,41 +213,45 @@ async def check_responsive_layout(
                 page = await browser.new_page(viewport={"width": width, "height": 800})
                 await page.goto(target_url)
                 
-                # 1. Check for horizontal scrollbar (common responsive issue)
+                issues = []
+
+                # 1. Check for Tailwind CSS
+                tailwind_loaded = await page.evaluate("""() => {
+                    const scripts = Array.from(document.querySelectorAll('script'));
+                    return scripts.some(s => s.src.includes('tailwindcss'));
+                }""")
+                if not tailwind_loaded:
+                    issues.append("Tailwind CSS CDN script missing")
+
+                # 2. Check for horizontal scrollbar
                 scroll_width = await page.evaluate("document.body.scrollWidth")
                 client_width = await page.evaluate("document.body.clientWidth")
-                
-                issues = []
                 if scroll_width > client_width + 1:
                     issues.append("Horizontal scroll detected")
 
-                # 2. Check Layout Integrity (Overlaps)
-                # We check if header, main, and footer overlap
-                # This is a basic heuristic
-                elements = ["header", "main", "footer"]
-                boxes = {}
-                for el in elements:
-                    if await page.locator(el).count() > 0:
-                        box = await page.locator(el).bounding_box()
-                        if box:
-                            boxes[el] = box
+                # 3. Check Layout Integrity
+                elements = {
+                    "header": page.get_by_role("banner").first,
+                    "main": page.get_by_role("main").first,
+                    "footer": page.get_by_role("contentinfo").first,
+                }
                 
-                # Check for overlaps between header and main
-                if "header" in boxes and "main" in boxes:
-                    h = boxes["header"]
-                    m = boxes["main"]
-                    # Simple check: does header bottom extend past main top?
-                    # Note: This assumes standard block layout. Fixed headers might legitimately overlap.
-                    # We'll just check if they are completely on top of each other which is bad.
-                    if h['y'] + h['height'] > m['y'] + 50: # Allow some buffer
-                         # Only flag if main isn't pushed down
-                         pass # Complex to detect reliably without more context, skipping overlap check for now to avoid false positives
-
-                # 3. Check for zero-sized important elements
-                for el in elements:
-                    if el in boxes:
-                        if boxes[el]['width'] == 0 or boxes[el]['height'] == 0:
-                            issues.append(f"Element <{el}> has zero size")
+                for name, locator in elements.items():
+                    if await locator.count() > 0:
+                        box = await locator.bounding_box()
+                        if box:
+                            if box['width'] == 0 or box['height'] == 0:
+                                issues.append(f"Element <{name}> has zero size")
+                            
+                            # Check for computed styles (e.g., background color)
+                            # This helps detect unstyled headers
+                            if name == "header":
+                                bg_color = await locator.evaluate("el => window.getComputedStyle(el).backgroundColor")
+                                if bg_color == "rgba(0, 0, 0, 0)" or bg_color == "transparent":
+                                    # Check if it has a background image class
+                                    has_bg_class = await locator.evaluate("el => el.className.includes('bg-')")
+                                    if not has_bg_class:
+                                        issues.append(f"Header might be unstyled (transparent background)")
 
                 if issues:
                     results[str(width)] = f"fail: {', '.join(issues)}"

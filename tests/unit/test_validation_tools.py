@@ -4,8 +4,7 @@ from video_to_website.tools.validation_tools import validate_accessibility, chec
 class TestValidationTools:
     """Tests for validation tools."""
 
-    @pytest.mark.asyncio
-    async def test_validate_accessibility(self):
+    def test_validate_accessibility(self):
         """Should return accessibility results."""
         html_content = "<html><body>Test</body></html>"
         # Note: validate_accessibility expects a file path, not content string directly in the new implementation.
@@ -20,7 +19,7 @@ class TestValidationTools:
             temp_path = f.name
             
         try:
-            result = await validate_accessibility(temp_path)
+            result = validate_accessibility(temp_path)
             # If playwright/axe are missing, it returns warning, which is fine for unit test environment
             assert result["status"] in ["success", "warning"]
             if result["status"] == "success":
@@ -29,11 +28,10 @@ class TestValidationTools:
             if os.path.exists(temp_path):
                 os.remove(temp_path)
 
-    @pytest.mark.asyncio
-    async def test_check_responsive_layout(self):
+    def test_check_responsive_layout(self):
         """Should check layout at breakpoints."""
         url = "http://example.com"
         breakpoints = [320, 768]
-        result = await check_responsive_layout(url, breakpoints)
+        result = check_responsive_layout(url, breakpoints)
         assert result["status"] == "success"
         assert "results" in result

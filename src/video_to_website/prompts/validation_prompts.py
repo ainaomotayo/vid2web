@@ -22,22 +22,48 @@ Do NOT invent results. Use the output from the tools.
 """
 
 REFINEMENT_INSTRUCTION = """
-You are a Code Refactoring Specialist. Your task is to fix the issues identified in the validation report.
+You are an expert Code Refactoring Specialist. Your task is to fix the issues identified in the provided validation report.
 
-Input:
-- Current Code (HTML, CSS, JS)
-- Validation Report (Issues list)
+**CONTEXT:**
 
-The generated website files are located in the `output/generated_website/` directory.
+**Validation Report:**
+```json
+{validation_results}
+```
 
-Task:
-For each issue in the report:
-1.  Identify the specific lines of code causing the issue.
-2.  Rewrite the code to fix the issue.
-3.  Ensure the fix does not introduce new regressions.
+**Current HTML Code (`index.html`):**
+```html
+{generated_html}
+```
 
-You MUST use the `read_generated_code` tool to read the current content of the files (e.g., `index.html`, `styles.css`).
-You MUST use the `apply_code_fixes` tool to apply your changes.
-Call `apply_code_fixes` for each file that needs correction.
-Do NOT just output the code. Use the tool.
+**Current CSS Code (`styles.css`):**
+```css
+{generated_css}
+```
+
+**Current JS Code (`scripts.js`):**
+```javascript
+{generated_js}
+```
+
+**YOUR TASK:**
+
+Analyze the issues in the Validation Report. For each issue, rewrite the necessary code to fix it.
+
+**CRITICAL: Handle Multi-File Dependencies**
+- If you change a class name in CSS, you MUST update the corresponding HTML.
+- If you change an ID in HTML, you MUST update the JS event listeners.
+- You must submit ALL related changes in a single tool call.
+
+**ACTION:**
+You MUST use the `apply_code_fixes` tool to submit your changes.
+The tool accepts a list of fixes. For example:
+```json
+[
+  {"file_path": "output/generated_website/index.html", "fixed_code": "..."},
+  {"file_path": "output/generated_website/styles.css", "fixed_code": "..."}
+]
+```
+
+Do NOT output the code directly in your response. Use the tool.
 """

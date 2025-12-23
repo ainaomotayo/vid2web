@@ -40,6 +40,14 @@ except ImportError:
 logger = logging.getLogger(__name__)
 load_dotenv()
 
+def _get_session_output_dir(tool_context: ToolContext | None) -> Path:
+    """Determines the output directory based on the session ID."""
+    base_output = Path("output")
+    if tool_context and hasattr(tool_context, "session_id") and tool_context.session_id:
+        return base_output / tool_context.session_id / "generated_website"
+    else:
+        return base_output / "generated_website"
+
 def _is_youtube_url(url: str) -> bool:
     """Checks if the given string is a YouTube URL."""
     youtube_regex = (
@@ -269,14 +277,20 @@ def extract_audio_transcript(
         client = genai.Client(api_key=api_key)
         video_file = _upload_file(client, path)
 
+        # Updated prompt to request summary instead of full transcript to avoid JSON errors
         prompt = """
-        Transcribe the audio from this video. Provide the output in JSON format with the following keys:
+        Analyze the audio from this video. Provide a structured summary of the content for a website.
+        Output in JSON format with the following keys:
         {
-            "transcript": [{"timestamp": "string", "text": "string"}],
-            "summary": "string",
+            "page_content": {
+                "hero_section": {"heading": "string", "subheading": "string"},
+                "about_section": {"title": "string", "body": "string"},
+                "features": [{"title": "string", "description": "string"}]
+            },
             "navigation_structure": ["string"],
             "cta_elements": ["string"]
         }
+        Do NOT provide a verbatim transcript. Focus on extracting usable website content.
         Ensure the output is valid JSON.
         """
 
@@ -292,7 +306,7 @@ def extract_audio_transcript(
             transcript_results = _parse_json_response(response.text)
             if "items" in transcript_results and isinstance(transcript_results["items"], list) and len(transcript_results["items"]) > 0:
                 first_item = transcript_results["items"][0]
-                if isinstance(first_item, dict) and "transcript" in first_item:
+                if isinstance(first_item, dict) and "page_content" in first_item:
                     transcript_results = first_item
         except Exception as e:
              logger.warning(f"Failed to parse JSON response from Gemini: {e}. Returning raw text.")
@@ -319,15 +333,18 @@ def extract_and_save_images_from_video(
     video_path: str,
     output_dir: str = "output/generated_website/assets",
     threshold: float = 0.4,
+    blur_threshold: float = 100.0,
     tool_context: ToolContext | None = None,
 ) -> dict[str, Any]:
     """
     Extracts significant frames from a video based on scene changes and saves them as images.
+    Filters out blurry images.
 
     Args:
         video_path: Path to the video file.
         output_dir: Directory to save the extracted images.
         threshold: Histogram difference threshold for scene change detection.
+        blur_threshold: Laplacian variance threshold. Below this, image is considered blurry.
         tool_context: ADK tool context.
 
     Returns:
@@ -336,13 +353,36 @@ def extract_and_save_images_from_video(
     if not CV2_AVAILABLE:
         return {"status": "error", "error": "OpenCV (cv2) is not installed."}
 
-    logger.info(f"Extracting images from {video_path} into {output_dir}")
+    # Determine session-specific output directory
+    output_path = Path(output_dir)
+    if tool_context:
+        session_dir = _get_session_output_dir(tool_context)
+        output_path = session_dir / "assets"
+    
+    logger.info(f"Extracting images from {video_path} into {output_path}")
     
     # Ensure output directory exists
-    assets_dir = Path(output_dir)
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    temp_video_path = None
+    
+    # Handle YouTube URLs by downloading first
+    if _is_youtube_url(video_path):
+        try:
+            temp_dir = Path("temp_videos")
+            temp_dir.mkdir(exist_ok=True)
+            filename = "youtube_video_frames.mp4"
+            temp_video_path = temp_dir / filename
+            logger.info(f"Downloading video for frame extraction to {temp_video_path}")
+            _download_youtube_video(video_path, temp_video_path)
+            video_path = str(temp_video_path)
+        except Exception as e:
+            return {"status": "error", "error": f"Failed to download YouTube video for frame extraction: {e}"}
 
     saved_images = []
+    # List of relative paths for the web
+    web_paths = []
+    
     try:
         cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
@@ -371,10 +411,20 @@ def extract_and_save_images_from_video(
                 # Compare histograms to detect scene change
                 diff = cv2.compareHist(prev_hist, hist, cv2.HISTCMP_CORREL)
                 if diff < threshold:
-                    image_path = assets_dir / f"image_{image_index}.jpg"
+                    # Check for blurriness
+                    variance = cv2.Laplacian(gray, cv2.CV_64F).var()
+                    if variance < blur_threshold:
+                        logger.info(f"Skipping blurry frame (variance: {variance:.2f})")
+                        continue
+
+                    filename = f"image_{image_index}.jpg"
+                    image_path = output_path / filename
                     cv2.imwrite(str(image_path), frame)
                     saved_images.append(str(image_path))
-                    logger.info(f"Scene change detected. Saved {image_path}")
+                    # Store relative web path (e.g., "assets/image_1.jpg")
+                    web_paths.append(f"assets/{filename}")
+                    
+                    logger.info(f"Scene change detected. Saved {image_path} (variance: {variance:.2f})")
                     image_index += 1
             
             prev_hist = hist
@@ -382,10 +432,17 @@ def extract_and_save_images_from_video(
         cap.release()
 
         if tool_context:
-            tool_context.state["asset_manifest"] = saved_images
+            # Store the web-ready paths in the manifest
+            tool_context.state["asset_manifest"] = web_paths
 
-        return {"status": "success", "images_saved": len(saved_images), "image_paths": saved_images}
+        return {"status": "success", "images_saved": len(saved_images), "image_paths": web_paths}
 
     except Exception as e:
         logger.error(f"Error extracting images: {e}")
         return {"status": "error", "error": str(e)}
+    finally:
+        if temp_video_path and temp_video_path.exists():
+            try:
+                os.remove(temp_video_path)
+            except OSError:
+                pass

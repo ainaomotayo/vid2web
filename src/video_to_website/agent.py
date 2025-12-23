@@ -12,9 +12,10 @@ from .agents.validator_agent import validator_agent
 from .agents.refiner_agent import refiner_agent
 from .plugins.model_fallback_plugin import ModelFallbackPlugin
 from .plugins.stagger_plugin import StaggerPlugin
+from .plugins.context_pruning_plugin import ContextPruningPlugin
 
 # Use Gemini 2.5 Flash for better parallel throughput
-MODEL_NAME = "gemini-3-pro-preview"
+MODEL_NAME = "gemini-2.5-flash"
 
 # Configure retry options for robustness against quota limits
 retry_options = types.HttpRetryOptions(
@@ -81,5 +82,6 @@ app = App(
         ModelFallbackPlugin(),
         ReflectAndRetryToolPlugin(max_retries=3),
         StaggerPlugin(min_delay=5.0, max_delay=15.0), # Add stagger plugin
+        ContextPruningPlugin(max_history_turns=4), # Add context pruning placeholder
     ],
 )

@@ -1,7 +1,21 @@
 import pytest
 from google.adk.runners import InMemoryRunner
 from google.genai import types
-from google.adk.types import EventType  # Import EventType
+
+# Robust import for EventType
+try:
+    from google.adk.types import EventType
+except ImportError:
+    try:
+        from google.adk.events import EventType
+    except ImportError:
+        try:
+            from google.adk.events.event import EventType
+        except ImportError:
+            # Fallback definition if import fails
+            class EventType:
+                TOOL_CALL = "tool_call"
+
 from video_to_website.agents.architecture_agent import architecture_agent
 from video_to_website.plugins.model_fallback_plugin import ModelFallbackPlugin
 from google.adk.plugins import ReflectAndRetryToolPlugin
@@ -51,7 +65,8 @@ async def test_architecture_agent_calls_correct_tool(runner, session):
         new_message=message,
     ):
         # Use the correct EventType check
-        if event.event_type == EventType.TOOL_CALL:
+        event_type = getattr(event, "event_type", None)
+        if event_type == EventType.TOOL_CALL:
             if event.content and event.content.parts:
                 for part in event.content.parts:
                     if part.function_call and part.function_call.name == expected_tool_name:

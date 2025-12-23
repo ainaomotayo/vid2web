@@ -8,9 +8,10 @@ This project is an autonomous website creation system that transforms video walk
 
 - **Video Analysis**: Uses Gemini's multimodal reasoning to extract design intent, layout patterns, color schemes, and visual hierarchy from video walkthroughs.
 - **Content Extraction**: Identifies text content, information architecture, and navigation structure from verbal descriptions in the video.
-- **Code Generation**: Produces production-ready HTML, CSS, and JavaScript implementations.
+- **Code Generation**: Produces production-ready HTML, CSS, and JavaScript implementations. Supports **React** and **Vue** frameworks.
 - **Automated Validation**: Employs agents for in-browser validation (using Playwright), accessibility checks, and responsive design verification.
 - **Iterative Refinement**: Uses ADK's `LoopAgent` for continuous improvement based on validation feedback.
+- **Asset Extraction**: Automatically extracts high-quality images from the video stream to populate the website.
 
 ## Use Cases
 
@@ -51,6 +52,7 @@ This tool is designed to dramatically accelerate the "idea-to-code" and "content
   - `yt-dlp`: For downloading YouTube videos for analysis.
   - `dirtyjson`: For robust parsing of LLM-generated JSON.
   - `python-dotenv`: For managing environment variables.
+  - `streamlit`: For the interactive user interface.
 
 ## Project Structure
 
@@ -63,13 +65,15 @@ video-to-website-generator/
 │       ├── tools/               # Custom tool functions
 │       ├── prompts/             # LLM instruction templates
 │       ├── schemas/             # Pydantic models for structured data
-│       └── plugins/             # Custom ADK plugins (e.g., ModelFallback)
+│       ├── plugins/             # Custom ADK plugins (e.g., ModelFallback)
+│       └── ui/                  # Streamlit application
 ├── tests/
 │   ├── unit/
 │   └── integration/
 ├── examples/
 │   └── basic_usage.py       # Runnable example to generate a website
 ├── output/                      # Generated website output (gitignored)
+├── Dockerfile                   # Container definition for deployment
 └── .gitignore                   # Files to ignore in version control
 ```
 
@@ -124,29 +128,27 @@ The application requires a Google Gemini API key.
 
 ## How to Run
 
-### Generate a Website
+### Run the UI (Recommended)
 
-To run the full pipeline and generate a website from the default YouTube video, execute the `basic_usage.py` script from the project root.
+Launch the interactive Streamlit application:
 
 **On Windows (Command Prompt):**
 ```cmd
-set PYTHONPATH=src && python examples/basic_usage.py
-```
-
-**On Windows (PowerShell):**
-```powershell
-$env:PYTHONPATH="src"; python examples/basic_usage.py
+set PYTHONPATH=src && python -m streamlit run src/video_to_website/ui/streamlit_app.py
 ```
 
 **On macOS/Linux:**
 ```bash
-export PYTHONPATH=src && python examples/basic_usage.py
+export PYTHONPATH=src && python -m streamlit run src/video_to_website/ui/streamlit_app.py
 ```
 
-The script will:
-1. Download the video.
-2. Run the full agent pipeline (Analysis -> Architecture -> Code Gen -> Validation).
-3. Save the generated `index.html`, `styles.css`, and `scripts.js` files to the `output/generated_website/` directory.
+### Run via CLI
+
+To run the pipeline without the UI:
+
+```bash
+python examples/basic_usage.py
+```
 
 ### Run Tests
 
@@ -156,7 +158,25 @@ To verify that all components are working correctly, run the test suite:
 pytest
 ```
 
-To run tests in parallel for faster execution:
-```bash
-pytest -n auto
-```
+## Troubleshooting
+
+### Playwright Issues on Windows
+If you encounter `NotImplementedError` related to asyncio loops:
+- Ensure you are running the app with `python -m streamlit run ...`.
+- The application automatically sets the `WindowsProactorEventLoopPolicy` to fix this.
+
+### "ModuleNotFoundError"
+- Ensure your virtual environment is activated.
+- Ensure `PYTHONPATH` is set to `src` if running scripts directly.
+
+### Quota Errors (429)
+- The application includes a `ModelFallbackPlugin` that automatically switches to lower-tier models (Gemini 2.5 Flash -> 2.0 Flash) if the primary model hits a quota limit.
+- It also includes a `StaggerPlugin` to prevent parallel agents from hitting the API simultaneously.
+
+## Gallery
+
+*(Add screenshots of input videos and generated websites here)*
+
+| Input Video | Generated Website |
+| :---: | :---: |
+| ![Video Thumbnail](path/to/thumbnail.jpg) | ![Website Screenshot](path/to/screenshot.jpg) |
