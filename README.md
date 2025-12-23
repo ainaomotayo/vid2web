@@ -17,10 +17,10 @@ This project is an autonomous website creation system that transforms video walk
 
 See the tool in action:
 
-| **Input Video** | **Generated Website** |
-| :---: | :---: |
-| <a href="https://www.youtube.com/watch?v=P1wSY4rWKgs" target="_blank"><img src="docs/images/output.gif" alt="Video Input"></a> | ![Generated Website](docs/images/generated_website.jpeg) |
-| *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)* | *Generated in < 2 minutes* |
+|                                                         **Input Video**                                                         | **Generated Website** |
+|:-------------------------------------------------------------------------------------------------------------------------------:| :---: |
+| <a href="https://www.youtube.com/watch?v=P1wSY4rWKgs" target="_blank"><img src="docs/images/output1.gif" alt="Video Input"></a> | ![Generated Website](docs/images/generated_website.jpeg) |
+|                              *[Watch Original Video](https://www.youtube.com/watch?v=P1wSY4rWKgs)*                              | *Generated in < 2 minutes* |
 
 ## Use Cases
 
